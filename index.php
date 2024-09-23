@@ -1,4 +1,5 @@
 <?php
+header('Location:./data/seed.php');
 
 $filenameCharacList = __DIR__ . '/data/CharacList.json';
 $filenameCurrentCharacList = __DIR__ . '/data/currentCharacList.json';
