@@ -1,0 +1,36 @@
+{
+    "Perso1": {
+        "id": 0,
+        "name": "Legolas",
+        "health": {
+            "currentPV": -44,
+            "totalPV": 50
+        },
+        "strength": 54,
+        "defense": 4,
+        "esquiveBonus": false,
+        "weapon": {
+            "name": "Ax-o-lot",
+            "strength": 6,
+            "class": "ax"
+        },
+        "class": "Elf"
+    },
+    "Perso2": {
+        "id": 5,
+        "name": "Arthur",
+        "health": {
+            "currentPV": -47,
+            "totalPV": 22
+        },
+        "strength": 47,
+        "defense": 4,
+        "esquiveBonus": false,
+        "weapon": {
+            "name": "Anduril",
+            "strength": 5,
+            "class": "sword"
+        },
+        "class": "Man"
+    }
+}
