@@ -21,12 +21,12 @@ $statement->bindParam(':strength', $strength);
 $statement->bindParam(':class', $class);
 
 foreach ($arrayWeaponList as $weapon) {
-    $name = $weapon['name'];
-    $picture = $weapon['picture'];
-    $strength = $weapon['strength'];
-    $class = $weapon['class'];
+  $name = $weapon['name'];
+  $picture = $weapon['picture'];
+  $strength = $weapon['strength'];
+  $class = $weapon['class'];
 
-    $statement->execute();
+  $statement->execute();
 }
 
 //characterList table
@@ -64,17 +64,17 @@ $statement->bindParam(':class', $class);
 $statement->bindParam(':status', $status);
 
 foreach ($arrayCharacList as $charac) {
-    $name = $charac['name'];
-    $picture = $charac['picture'];
-    $strength = $charac['strength'];
-    $defense = $charac['defense'];
-    $health = $charac['health'];
-    $class = $charac['class'];
+  $name = $charac['name'];
+  $picture = $charac['picture'];
+  $strength = $charac['strength'];
+  $defense = $charac['defense'];
+  $health = $charac['health'];
+  $class = $charac['class'];
 
-    $statement->execute();
+  $statement->execute();
 }
 
 //current character table
 
-$statement = $pdo->prepare("CREATE TABLE currcharac (`numPerso` INT NOTNULL, `name` VARCHAR(45), `picture` VARCHAR(100), `currHealth` INT, `totalHealth` INT, `currStrength` INT, `currDefense` INT, `class` VARCHAR(20), `idWeapon` INT)");
+$statement = $pdo->prepare("CREATE TABLE currcharac (`numPerso` INT NOT NULL, `idCharac` INT , `name` VARCHAR(45), `currHealth` INT, `totalHealth` INT, `currStrength` INT, `currDefense` INT, `class` VARCHAR(20), `idWeapon` INT)");
 $statement->execute();
