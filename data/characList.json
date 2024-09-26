@@ -6,7 +6,7 @@
     "health": 50,
     "strength": 10,
     "defense": 4,
-    "class": "Elf"
+    "class": "elf"
   },
   "1": {
     "id": 1,
@@ -15,7 +15,7 @@
     "health": 40,
     "strength": 5,
     "defense": 4,
-    "class": "Dwarf"
+    "class": "dwarf"
   },
   "2": {
     "id": 2,
@@ -24,7 +24,7 @@
     "health": 25,
     "strength": 10,
     "defense": 5,
-    "class": "Man"
+    "class": "man"
   },
   "3": {
     "id": 3,
@@ -33,7 +33,7 @@
     "health": 10,
     "strength": 1,
     "defense": 6,
-    "class": "Dwarf"
+    "class": "dwarf"
   },
   "4": {
     "id": 4,
@@ -42,7 +42,7 @@
     "health": 20,
     "strength": 6,
     "defense": 2,
-    "class": "Elf"
+    "class": "elf"
   },
   "5": {
     "id": 5,
@@ -51,6 +51,6 @@
     "health": 22,
     "strength": 8,
     "defense": 5,
-    "class": "Man"
+    "class": "man"
   }
 }
