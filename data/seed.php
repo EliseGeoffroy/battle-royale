@@ -2,6 +2,15 @@
 
 require_once('../database/pdoOpen.php');
 
+$statement = $pdo->prepare("DROP TABLE weapon");
+$statement->execute();
+
+$statement = $pdo->prepare("DROP TABLE currCharac");
+$statement->execute();
+
+$statement = $pdo->prepare("DROP TABLE characterList");
+$statement->execute();
+
 //weapon table
 $arrayWeaponList = json_decode(file_get_contents('./WeaponList.json'), true);
 
@@ -76,5 +85,5 @@ foreach ($arrayCharacList as $charac) {
 
 //current character table
 
-$statement = $pdo->prepare("CREATE TABLE currcharac (`numPerso` INT NOT NULL, `idCharac` INT , `name` VARCHAR(45), `currHealth` INT, `totalHealth` INT, `currStrength` INT, `currDefense` INT, `class` VARCHAR(20), `idWeapon` INT)");
+$statement = $pdo->prepare("CREATE TABLE currcharac (`idRound` INT AUTO_INCREMENT NOT NULL, `numPerso` INT NOT NULL, `idCharac` INT , `name` VARCHAR(45), `currHealth` INT, `totalHealth` INT, `currStrength` INT, `currDefense` INT, `esquiveBonus` BOOLEAN, `class` VARCHAR(20), `idWeapon` INT, `currStrengthWeapon` INT, `action` VARCHAR(45), PRIMARY KEY (idRound))");
 $statement->execute();
