@@ -1,29 +1,21 @@
 <?php
 
-
 $dir = __DIR__;
 
-require_once __DIR__ . '/includes/classPerso.php';
-require_once __DIR__ . '/includes/classWeapon.php';
-require_once __DIR__ . '/includes/usualFunctions.php';
+require_once $dir . '/database/pdoOpen.php';
 
-$filenameCharac = $dir . '/data/charac.json';
+require_once $dir . '/includes/classPerso.php';
+require_once $dir . '/includes/classWeapon.php';
 
+require_once $dir . '/includes/objectConstruct.php';
 
-$arrayPerso = json_decode(file_get_contents($filenameCharac), true);
-
-$arrayPerso1 = $arrayPerso['Perso1'];
-$perso1 = classChoice($arrayPerso1);
-
-$arrayPerso2 = $arrayPerso['Perso2'];
-$perso2 = classChoice($arrayPerso2);
+require_once $dir . '/includes/usualFunctions.php';
 
 
+if ($_GET['status'] == 'gip') {
 
-if ($_GET != []) {
-
-    $descrAction1 = $_GET['action1'];
-    $descrAction2 = $_GET['action2'];
+    $descrAction1 = editDescription($pdo, $perso1, $perso2, 1);
+    $descrAction2 = editDescription($pdo, $perso2, $perso1, 2);
 }
 
 ?>

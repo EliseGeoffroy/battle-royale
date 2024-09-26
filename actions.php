@@ -1,21 +1,16 @@
 <?php
 
 $dir = __DIR__;
-require_once __DIR__ . '/includes/classPerso.php';
-require_once __DIR__ . '/includes/classWeapon.php';
-require_once __DIR__ . '/includes/usualFunctions.php';
 
-$filenameCharac = $dir . '/data/charac.json';
+require_once $dir . '/database/pdoOpen.php';
+
+require_once $dir . '/includes/classPerso.php';
+require_once $dir . '/includes/classWeapon.php';
+require_once $dir . '/includes/usualFunctions.php';
+
+require_once $dir . '/includes/objectConstruct.php';
 
 
-
-$arrayPerso = json_decode(file_get_contents($filenameCharac), true);
-
-$arrayPerso1 = $arrayPerso['Perso1'];
-$perso1 = classChoice($arrayPerso1);
-
-$arrayPerso2 = $arrayPerso['Perso2'];
-$perso2 = classChoice($arrayPerso2);
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -26,65 +21,85 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($action2 != 'attack') {
         if ($action2 == 'defende') {
             $perso2->defende();
-            $descrAction2 = $perso2->name . ' se met en position de défense.';
         } else {
             $perso2->special();
-            $descrAction2 = $perso2->name . ' a utilisé son action spéciale : ' . $perso2->specialAction;
         }
         switch ($action1) {
             case 'defende':
                 $perso1->defende();
-                $descrAction1 = $perso1->name . ' se met en position de défense.';
+
                 break;
 
             case 'attack':
-                $descrAction1 = attack($perso1, $perso2);
+                $action1 = attack($perso1, $perso2);
 
                 break;
             case 'special':
                 $perso1->special();
-                $descrAction1 = $perso1->name . ' a utilisé son action spéciale : ' . $perso1->specialAction;
+
                 break;
         }
     } else {
         switch ($action1) {
             case 'defende':
                 $perso1->defende();
-                $descrAction1 = $perso1->name . ' se met en position de défense.';
-
                 break;
 
             case 'attack':
-                $descrAction1 = attack($perso1, $perso2);
-
+                $action1 = attack($perso1, $perso2);
                 break;
+
             case 'special':
                 $perso1->special();
-                $descrAction1 = $perso1->name . ' a utilisé son action spéciale : ' . $perso1->specialAction;
                 break;
         }
-        $descrAction2 = attack($perso2, $perso1);
+        $action2 = attack($perso2, $perso1);
     }
 }
 
+echo 'je suis là!';
+$statement = $pdo->prepare("INSERT INTO currcharac (idRound, numPerso, idCharac, name, currHealth, totalHealth, currStrength, currDefense, esquiveBonus, class, idWeapon, currStrengthWeapon, action) VALUES (DEFAULT,:numPerso,:id,:name,:currHealth,:totalHealth,:currStrength,:currDefense, :esquiveBonus, :class, :idWeapon, :currStrengthWeapon, :action)");
 
-$arrayPerso = [
-    "Perso1" => $perso1->toJson(),
-    "Perso2" => $perso2->toJson()
-];
+$statement->bindValue(':numPerso', 1);
+$statement->bindValue(':id', $perso1->id);
+$statement->bindValue(':name', $perso1->name);
+$statement->bindValue(':currHealth', $perso1->health['currentPV']);
+$statement->bindValue(':totalHealth', $perso1->health['totalPV']);
+$statement->bindValue(':currStrength', $perso1->strength['basicStrength']);
+$statement->bindValue(':currDefense', $perso1->defense['basicDefense']);
+$statement->bindValue(':esquiveBonus', $perso1->esquiveBonus);
+echo 'esquive :' . $perso1->esquiveBonus;
+$statement->bindValue(':class', $perso1->class);
+$statement->bindValue(':idWeapon', $perso1->weapon->id);
+$statement->bindValue(':currStrengthWeapon', $perso1->weapon->strength);
+$statement->bindValue(':action', $action1);
 
-echo '<pre>';
-print_r($arrayPerso);
-echo '</pre>';
+$statement->execute();
 
-file_put_contents($filenameCharac, json_encode($arrayPerso, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+
+$statement->bindValue(':numPerso', 2);
+$statement->bindValue(':id', $perso2->id);
+$statement->bindValue(':name', $perso2->name);
+$statement->bindValue(':currHealth', $perso2->health['currentPV']);
+$statement->bindValue(':totalHealth', $perso2->health['totalPV']);
+$statement->bindValue(':currStrength', $perso2->strength['basicStrength']);
+$statement->bindValue(':currDefense', $perso2->defense['basicDefense']);
+$statement->bindValue(':esquiveBonus', $perso2->esquiveBonus);
+$statement->bindValue(':class', $perso2->class);
+$statement->bindValue(':idWeapon', $perso2->weapon->id);
+$statement->bindValue(':currStrengthWeapon', $perso2->weapon->strength);
+$statement->bindValue(':action', $action2);
+
+$statement->execute();
+
+
 
 if (($perso1->health['currentPV'] <= 0) && ($perso2->health['currentPV'] <= 0)) {
-    header('Location:./winner.php?win=');
+    header('Location:./winner.php?win=0');
 } else if ($perso2->health['currentPV'] <= 0) {
-    header('Location:./winner.php?win=Perso1');
+    header('Location:./winner.php?win=1');
 } else if ($perso1->health['currentPV'] <= 0) {
-    header('Location:./winner.php?win=Perso2');
+    header('Location:./winner.php?win=2');
 } else {
-    header("Location:./game.php?action1=$descrAction1&action2=$descrAction2");
+    header("Location:./game.php?status=gip");
 }

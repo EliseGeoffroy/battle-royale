@@ -7,9 +7,9 @@
                 <img src='<?= $charac['picture'] ?>' style="clip:rect(0px,60px,200px,0px);overflow:hidden">
                 <p class=name> <?= $charac['name'] ?></p>
                 <p class=class> <?= match ($charac['class']) {
-                                    "Elf" => "Elfe",
-                                    "Man" => "Homme",
-                                    "Dwarf" => "Nain",
+                                    "elf" => "Elfe",
+                                    "man" => "Homme",
+                                    "dwarf" => "Nain",
                                     default => "Inconnue"
                                 } ?></p>
 

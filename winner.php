@@ -1,15 +1,64 @@
 <?php
+
+$dir = __DIR__;
+require_once $dir . '/database/pdoOpen.php';
+
 $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-$arrayPerso = json_decode(file_get_contents('./data/charac.json'), true);
-
-$someoneWins = false;
-
-if ($_GET['win']) {
-    $someoneWins = true;
-    $winnerName = $arrayPerso[$_GET['win']]['name'];
-    $winnerId = $arrayPerso[$_GET['win']]['id'];
+switch ($_GET['win']) {
+    case 0:
+        $someoneWins = false;
+        break;
+    case 1:
+        $someoneWins = true;
+        $numWinner = 1;
+        $numLoser = 2;
+        break;
+    case 2:
+        $someoneWins = true;
+        $numWinner = 2;
+        $numLoser = 1;
+        break;
 }
+
+
+$statement = $pdo->prepare("SELECT * FROM currcharac WHERE numPerso=:numWinner ORDER BY idRound DESC");
+$statement->bindValue(':numWinner', $numWinner);
+$statement->execute();
+$winnerTable = $statement->fetch();
+$winnerName = $winnerTable['name'];
+$winnerId = $winnerTable['idCharac'];
+
+$statement = $pdo->prepare("SELECT idWeapon, idCharac FROM currcharac WHERE numPerso=:numLoser ORDER BY idRound DESC");
+$statement->bindValue(':numLoser', $numLoser);
+$statement->execute();
+
+$loserWeapon = $statement->fetch()['idWeapon'];
+$loserId = $statement->fetch()['idCharac'];
+
+$statement = $pdo->prepare("DELETE FROM currcharac");
+$statement->execute();
+
+$statement = $pdo->prepare("INSERT INTO currcharac (idRound, numPerso, idCharac, name, currHealth, totalHealth, currStrength, currDefense, esquiveBonus, class, idWeapon, currStrengthWeapon) VALUES (DEFAULT,:numPerso,:id,:name,:currHealth,:totalHealth,:currStrength,:currDefense, :esquiveBonus, :class, :idWeapon, :currStrengthWeapon)");
+
+$statement->bindValue(':numPerso', 1);
+$statement->bindValue(':id', $winnerId);
+$statement->bindValue(':name', $winnerName);
+$statement->bindValue(':currHealth', $winnerTable['currHealth']);
+$statement->bindValue(':totalHealth', $winnerTable['totalHealth']);
+$statement->bindValue(':currStrength', $winnerTable['currStrength']);
+$statement->bindValue(':currDefense', $winnerTable['currDefense']);
+$statement->bindValue(':class', $winnerTable['class']);
+$statement->bindValue(':idWeapon', $winnerTable['idWeapon']);
+$statement->bindValue(':currStrengthWeapon', $winnerTable['currStrengthWeapon']);
+$statement->bindValue(':esquiveBonus', $winnerTable['esquiveBonus']);
+$statement->execute();
+
+$statement = $pdo->prepare("UPDATE characterList SET status='dead' WHERE id=:id");
+$statement->bindValue(':id', $loserId);
+$statement->execute();
+
+
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +90,7 @@ if ($_GET['win']) {
 
         <?php if ($someoneWins): ?>
             <div class=restOfGame>
-                <form action='./index.php?state=restOfGame&win=<?= $winnerId ?>' method='POST'>
+                <form action='./index.php?state=restOfGame&win=<?= $winnerId ?>&loserWeapon=<?= $loserWeapon ?>' method='POST'>
                     <div class=weaponSwap>
                         <label for='weaponSwap'>Voulez-vous récupérer l'arme de votre ennemi ?</label>
                         <input type='checkbox' id='weaponSwap' name='weaponSwap'>

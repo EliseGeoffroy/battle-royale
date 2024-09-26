@@ -85,7 +85,16 @@ class Perso implements PersoModel
 
     function __get($name)
     {
-        return $this->$name;
+
+        if ($name == 'esquiveBonus') {
+            if ($this->esquiveBonus == true) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else {
+            return $this->$name;
+        }
     }
 
     function __construct(public $id, public $name, $totalPV, $currentPV,  $basicStrength, $basicDefense, protected $esquiveBonus)
@@ -117,20 +126,6 @@ class Perso implements PersoModel
 
         return "$this->name armé de $weaponName PV: $currentPV/$totalPV Att:$currentStrength Def:$currentDefense";
     }
-
-    function toJson()
-    {
-        $arrayPerso = [
-            'id' => $this->id,
-            'name' => $this->name,
-            'health' => $this->health,
-            'strength' => $this->strength['currentStrength'],
-            'defense' => $this->defense['basicDefense'],
-            'esquiveBonus' => $this->esquiveBonus,
-            'weapon' => $this->weapon->toJson()
-        ];
-        return $arrayPerso;
-    }
 }
 
 class Man extends Perso
@@ -138,18 +133,14 @@ class Man extends Perso
 
     public $specialAction = 'Se vanter';
 
+    public $class = 'man';
+
     public function special()
     {
         $this->strength['currentStrength'] = ceil($this->strength['currentStrength'] * 120 / 100);
         $this->defense['basicDefense'] = floor($this->defense['basicDefense'] * 80 / 100);
     }
 
-    function toJson()
-    {
-        $arrayPerso = parent::toJson();
-        $arrayPerso = [...$arrayPerso, 'class' => 'Man'];
-        return $arrayPerso;
-    }
 
     function __construct($id, $name, $totalPV, $currentPV,  $basicStrength, $basicDefense, $esquiveBonus, protected $weapon)
     {
@@ -164,6 +155,7 @@ class Dwarf extends Perso
 {
 
     public $specialAction = 'Boire';
+    public $class = 'dwarf';
 
     public function special()
     {
@@ -173,12 +165,6 @@ class Dwarf extends Perso
         $this->defense['currentDefense'] = ceil($this->defense['currentDefense'] * 50 / 100);
     }
 
-    function toJson()
-    {
-        $arrayPerso = parent::toJson();
-        $arrayPerso = [...$arrayPerso, 'class' => 'Dwarf'];
-        return $arrayPerso;
-    }
 
     function __construct($id, $name, $totalPV, $currentPV,  $basicStrength, $basicDefense, $esquiveBonus, protected $weapon)
     {
@@ -192,17 +178,14 @@ class Dwarf extends Perso
 class Elf extends Perso
 {
     public $specialAction = 'Esquiver';
+    public $class = 'elf';
+
     function special()
     {
         $this->esquiveBonus = true;
     }
 
-    function toJson()
-    {
-        $arrayPerso = parent::toJson();
-        $arrayPerso = [...$arrayPerso, 'class' => 'Elf', "esquiveBonus" => $this->esquiveBonus];
-        return $arrayPerso;
-    }
+
 
 
     function __construct($id, $name, $totalPV, $currentPV,  $basicStrength, $basicDefense, $esquiveBonus, protected $weapon)

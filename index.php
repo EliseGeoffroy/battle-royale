@@ -1,5 +1,6 @@
 <?php
-header('Location:./data/seed.php');
+
+require_once('./database/pdoOpen.php');
 
 $filenameCharacList = __DIR__ . '/data/CharacList.json';
 $filenameCurrentCharacList = __DIR__ . '/data/currentCharacList.json';
@@ -10,33 +11,25 @@ $filenameWeaponList = __DIR__ . '/data/weaponList.json';
 $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 if (isset($_GET['state'])) {
-    $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-
-
-    $arrayLastPerso = json_decode(file_get_contents($filenameCharac), true);
-
-    $arrayPerso1 = $arrayLastPerso['Perso1'];
-    $arrayPerso2 = $arrayLastPerso['Perso2'];
-
-    if ($arrayPerso1['id'] == $_GET['win']) {
-        $arrayWinner = $arrayPerso1;
-        $arrayLoser = $arrayPerso2;
-    } else {
-        $arrayWinner = $arrayPerso2;
-        $arrayLoser = $arrayPerso1;
-    }
 
     if ($_POST['weaponSwap']) {
-        $arrayWinner['weapon'] = $arrayLoser['weapon'];
+
+        $idWeapon = $_GET['loserWeapon'];
+
+        $statement = $pdo->prepare("SELECT strength FROM weapon WHERE id=:id");
+
+        $statement->bindValue(':id', $idWeapon);
+        $statement->execute();
+        $strengthWeapon = $statement->fetch()['strength'];
+
+
+        $statement = $pdo->prepare("UPDATE currcharac SET idWeapon=:idWeapon, currStrengthWeapon=:strengthWeapon WHERE idCharac=:idCharac");
+        $statement->bindValue(':idWeapon', $idWeapon);
+        $statement->bindValue(':strengthWeapon', $strengthWeapon);
+        $statement->bindValue(':idCharac', $_GET['win']);
+
+        $statement->execute();
     }
-
-    file_put_contents($filenameCharac, json_encode($arrayWinner, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
-
-    $characList = json_decode(file_get_contents($filenameCurrentCharacList), true);
-    $keyCharac = array_search($arrayLoser['id'], array_column($characList, 'id'));
-    $charac = $characList[$keyCharac];
-    array_splice($characList, $keyCharac, 1);
-    file_put_contents($filenameCurrentCharacList, json_encode($characList, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
     $choice = 'charac2';
 } else {
@@ -44,19 +37,18 @@ if (isset($_GET['state'])) {
         $choice = $_GET['choice'];
     } else {
         $choice = 'charac1';
-
-        copy($filenameCharacList, $filenameCurrentCharacList);
     }
 }
 
 if (($choice == 'charac1') || ($choice == 'charac2')) {
 
-
-    $characList = json_decode(file_get_contents($filenameCurrentCharacList), true);
+    $statement = $pdo->prepare("SELECT id, name, picture, strength, defense, health, class FROM characterList  WHERE status='available'");
+    $statement->execute();
+    $characList = $statement->fetchAll();
 } else {
-
-
-    $weaponList = json_decode(file_get_contents($filenameWeaponList), true);
+    $statement = $pdo->prepare("SELECT id, name, picture, strength, class FROM weapon  ");
+    $statement->execute();
+    $weaponList = $statement->fetchAll();
 }
 
 
