@@ -3,6 +3,8 @@
 $dir = __DIR__;
 
 require_once $dir . '/database/pdoOpen.php';
+$currCharacDB = require_once($dir . '/database/models/currCharacDB.php');
+$weaponDB = require_once($dir . '/database/models/weaponDB.php');
 
 require_once $dir . '/includes/classPerso.php';
 require_once $dir . '/includes/classWeapon.php';
@@ -12,10 +14,12 @@ require_once $dir . '/includes/objectConstruct.php';
 require_once $dir . '/includes/usualFunctions.php';
 
 
+
+
 if ($_GET['status'] == 'gip') {
 
-    $descrAction1 = editDescription($pdo, $perso1, $perso2, 1);
-    $descrAction2 = editDescription($pdo, $perso2, $perso1, 2);
+    $descrAction1 = editDescription($perso1, $perso2, 1, $currCharacDB);
+    $descrAction2 = editDescription($perso2, $perso1, 2, $currCharacDB);
 }
 
 ?>

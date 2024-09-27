@@ -1,12 +1,11 @@
 <?php
 
 require_once('./database/pdoOpen.php');
+$characterListDB = require_once('./database/models/CharacterListDB.php');
+$currCharacDB = require_once('./database/models/currCharacDB.php');
+$weaponDB = require_once('./database/models/weaponDB.php');
 
-$filenameCharacList = __DIR__ . '/data/CharacList.json';
-$filenameCurrentCharacList = __DIR__ . '/data/currentCharacList.json';
-$filenameCharac = __DIR__ . '/data/charac.json';
 
-$filenameWeaponList = __DIR__ . '/data/weaponList.json';
 
 $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
@@ -16,19 +15,9 @@ if (isset($_GET['state'])) {
 
         $idWeapon = $_GET['loserWeapon'];
 
-        $statement = $pdo->prepare("SELECT strength FROM weapon WHERE id=:id");
+        $strengthWeapon = $weaponDB->selectStrength($idWeapon)['strength'];
 
-        $statement->bindValue(':id', $idWeapon);
-        $statement->execute();
-        $strengthWeapon = $statement->fetch()['strength'];
-
-
-        $statement = $pdo->prepare("UPDATE currcharac SET idWeapon=:idWeapon, currStrengthWeapon=:strengthWeapon WHERE idCharac=:idCharac");
-        $statement->bindValue(':idWeapon', $idWeapon);
-        $statement->bindValue(':strengthWeapon', $strengthWeapon);
-        $statement->bindValue(':idCharac', $_GET['win']);
-
-        $statement->execute();
+        $currCharacDB->updateWeapon($idWeapon, $strengthWeapon, 1);
     }
 
     $choice = 'charac2';
@@ -41,14 +30,9 @@ if (isset($_GET['state'])) {
 }
 
 if (($choice == 'charac1') || ($choice == 'charac2')) {
-
-    $statement = $pdo->prepare("SELECT id, name, picture, strength, defense, health, class FROM characterList  WHERE status='available'");
-    $statement->execute();
-    $characList = $statement->fetchAll();
+    $characList = $characterListDB->selectAll();
 } else {
-    $statement = $pdo->prepare("SELECT id, name, picture, strength, class FROM weapon  ");
-    $statement->execute();
-    $weaponList = $statement->fetchAll();
+    $weaponList = $weaponDB->selectAll();
 }
 
 
