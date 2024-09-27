@@ -4,10 +4,12 @@
 $dir = __DIR__;
 
 
-require_once('./database/pdoOpen.php');
-$characterListDB = require_once('./database/models/CharacterListDB.php');
-$currCharacDB = require_once('./database/models/currCharacDB.php');
-$weaponDB = require_once('./database/models/weaponDB.php');
+
+$characterListDB = require_once($dir . '/database/models/CharacterListDB.php');
+$currCharacDB = require_once($dir . '/database/models/currCharacDB.php');
+$weaponDB = require_once($dir . '/database/models/weaponDB.php');
+
+
 require_once('./includes/usualFunctions.php');
 
 

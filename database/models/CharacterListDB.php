@@ -1,5 +1,7 @@
 <?php
 
+require_once $dir . '/database/pdoOpen.php';
+
 class CharacterListDB
 {
     private PDOStatement $statementSelectAll;

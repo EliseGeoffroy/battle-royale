@@ -1,14 +1,9 @@
 <?php
 
-$perso1 = classChoice($currCharacDB, 1, $weaponDB);
-$perso2 = classChoice($currCharacDB, 2, $weaponDB);
-
-
 function weaponConstruct($idWeapon, $weaponDB)
 {
     $arrayWeapon = $weaponDB->selectOne($idWeapon);
     $weapon = new Weapon($idWeapon, $arrayWeapon['name'], $arrayWeapon['strength'], $arrayWeapon['class']);
-
 
     return $weapon;
 }

@@ -1,5 +1,7 @@
 <?php
 
+require_once $dir . '/database/pdoOpen.php';
+
 class CurrCharacDB
 {
     private PDOStatement $statementUpdateWeapon;

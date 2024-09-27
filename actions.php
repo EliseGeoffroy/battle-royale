@@ -2,17 +2,20 @@
 
 $dir = __DIR__;
 
-require_once $dir . '/database/pdoOpen.php';
+
 $currCharacDB = require_once($dir . '/database/models/currCharacDB.php');
 $weaponDB = require_once($dir . '/database/models/weaponDB.php');
+
+
 require_once $dir . '/includes/classPerso.php';
 require_once $dir . '/includes/classWeapon.php';
+
+
 require_once $dir . '/includes/usualFunctions.php';
 
 require_once $dir . '/includes/objectConstruct.php';
-
-
-
+$perso1 = classChoice($currCharacDB, 1, $weaponDB);
+$perso2 = classChoice($currCharacDB, 2, $weaponDB);
 
 
 

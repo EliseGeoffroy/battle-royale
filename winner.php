@@ -1,7 +1,7 @@
 <?php
 
 $dir = __DIR__;
-require_once $dir . '/database/pdoOpen.php';
+
 $characterListDB = require_once $dir . '/database/models/characterListDB.php';
 $currCharacDB = require_once $dir . '/database/models/currCharacDB.php';
 

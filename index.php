@@ -1,9 +1,10 @@
 <?php
 
-require_once('./database/pdoOpen.php');
-$characterListDB = require_once('./database/models/CharacterListDB.php');
-$currCharacDB = require_once('./database/models/currCharacDB.php');
-$weaponDB = require_once('./database/models/weaponDB.php');
+$dir = __DIR__;
+
+$characterListDB = require_once($dir . '/database/models/CharacterListDB.php');
+$currCharacDB = require_once($dir . '/database/models/currCharacDB.php');
+$weaponDB = require_once($dir . '/database/models/weaponDB.php');
 
 
 
@@ -11,7 +12,7 @@ $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 if (isset($_GET['state'])) {
 
-    if ($_POST['weaponSwap']) {
+    if (isset($_POST['weaponSwap'])) {
 
         $idWeapon = $_GET['loserWeapon'];
 
