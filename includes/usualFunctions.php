@@ -13,7 +13,7 @@ function characChoice($id, $numPerso, $characterListDB, $currCharacDB)
     $charac = $characterListDB->selectById($id);
 
 
-    $currCharacDB->insertCharac($numPerso, $_GET['id'], $charac['name'], $charac['health'], $charac['health'], $charac['strength'], $charac['defense'], 0, $charac['class']);
+    $currCharacDB->insertCharac($numPerso, $_GET['id'], $charac['health'],  $charac['strength'], $charac['defense']);
 
     $characterListDB->updateStatus('taken', $_GET['id']);
 }
@@ -53,4 +53,18 @@ function editDescription($activPerso, $passivPerso, $numPerso, $currCharacDB)
     }
 
     return $descrAction;
+}
+
+
+function actionChoice($action, $perso)
+{
+
+    return "<div class='$action'>
+                <label for='action'> 'Choisissez une action pour $perso->name </label>
+                <select name='$action' id='action'>
+                    <option value='attack'>Attaquer</option>
+                    <option value='defende'>Se défendre</option>
+                    <option value='special'> $perso->specialAction </option>
+                </select>
+            </div>";
 }

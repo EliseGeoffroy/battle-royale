@@ -14,7 +14,7 @@ $statement->execute();
 //weapon table
 $arrayWeaponList = json_decode(file_get_contents('./WeaponList.json'), true);
 
-$statement = $pdo->prepare("CREATE TABLE weapon  (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(45), picture VARCHAR(100), strength INT, class VARCHAR(45), PRIMARY KEY (id)) ");
+$statement = $pdo->prepare("CREATE TABLE weapon  (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(45), picture VARCHAR(100), strength INT NOT NULL, class ENUM ('bow','sword','ax') NOT NULL, PRIMARY KEY (id)) ");
 $statement->execute();
 
 $statement = $pdo->prepare("INSERT INTO weapon (id, name, picture, strength, class) VALUES (DEFAULT, :name, :picture, :strength, :class)");
@@ -48,7 +48,7 @@ $statement = $pdo->prepare("CREATE TABLE `battleroyale`.`characterList` (
   `strength` INT NOT NULL,
   `defense` INT NOT NULL,
   `health` INT NOT NULL,
-  `class` VARCHAR(20) NOT NULL,
+  `class` ENUM ('elf','man','dwarf') NOT NULL,
   `status` VARCHAR(20) NOT NULL,
   PRIMARY KEY (`id`));");
 
@@ -85,5 +85,24 @@ foreach ($arrayCharacList as $charac) {
 
 //current character table
 
-$statement = $pdo->prepare("CREATE TABLE currcharac (`idRound` INT AUTO_INCREMENT NOT NULL, `numPerso` INT NOT NULL, `idCharac` INT , `name` VARCHAR(45), `currHealth` INT, `totalHealth` INT, `currStrength` INT, `currDefense` INT, `esquiveBonus` BOOLEAN, `class` VARCHAR(20), `idWeapon` INT, `currStrengthWeapon` INT, `action` VARCHAR(45), PRIMARY KEY (idRound))");
+$statement = $pdo->prepare("CREATE TABLE currcharac (`idRound` INT AUTO_INCREMENT NOT NULL, `numPerso` INT NOT NULL, `idCharac` INT , `currHealth` INT, `currStrength` INT, `currDefense` INT, `esquiveBonus` BOOLEAN, `idWeapon` INT, `currStrengthWeapon` INT, `action` VARCHAR(45), PRIMARY KEY (idRound))");
+$statement->execute();
+
+
+$statement = $pdo->prepare("ALTER TABLE `battleroyale`.`currcharac` 
+ADD INDEX `FK_currCharac_characterList_idx` (`idCharac` ASC) VISIBLE,
+ADD INDEX `FK_currCharac_weapon_idx` (`idWeapon` ASC) VISIBLE;
+;
+ALTER TABLE `battleroyale`.`currcharac` 
+ADD CONSTRAINT `FK_currCharac_characterList`
+  FOREIGN KEY (`idCharac`)
+  REFERENCES `battleroyale`.`characterlist` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `FK_currCharac_weapon`
+  FOREIGN KEY (`idWeapon`)
+  REFERENCES `battleroyale`.`weapon` (`id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;");
+
 $statement->execute();

@@ -47,22 +47,11 @@ if ($_GET['status'] == 'gip') {
             <p> <?= $perso2 ?></p>
         </div>
         <form action="./actions.php" method="POST">
-            <div class="action1">
-                <label for="action"><?= 'Choisissez une action pour ' . $perso1->name ?></label>
-                <select name="action1" id="action">
-                    <option value="attack">Attaquer</option>
-                    <option value="defende">Se défendre</option>
-                    <option value="special"><?= $perso1->specialAction ?></option>
-                </select>
-            </div>
-            <div class="action2">
-                <label for="action"><?= 'Choisissez une action pour ' . $perso2->name ?></label>
-                <select name="action2" id="action">
-                    <option value="attack">Attaquer</option>
-                    <option value="defende">Se défendre</option>
-                    <option value="special"><?= $perso2->specialAction ?></option>
-                </select>
-            </div>
+
+
+            <?= actionChoice('action1', $perso1) ?>
+            <?= actionChoice('action2', $perso2) ?>
+
             <button type="Submit">Jouer le tour</button>
         </form>
 

@@ -62,14 +62,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $action2 = attack($perso2, $perso1);
     }
 }
-echo '<pre>';
-var_dump($currCharacDB);
-echo '</pre>';
 
 
-$currCharacDB->insertCharac(1, $perso1->id, $perso1->name, $perso1->health['currentPV'], $perso1->health['totalPV'], $perso1->strength['basicStrength'], $perso1->defense['basicDefense'], $perso1->esquiveBonus, $perso1->class, $perso1->weapon->id, $perso1->weapon->strength, $action1);
+$currCharacDB->insertCharac(1, $perso1->id,  $perso1->health['currentPV'],  $perso1->strength['basicStrength'], $perso1->defense['basicDefense'], $perso1->esquiveBonus, $perso1->weapon->id, $perso1->weapon->strength, $action1);
 
-$currCharacDB->insertCharac(2, $perso2->id, $perso2->name, $perso2->health['currentPV'], $perso2->health['totalPV'], $perso2->strength['basicStrength'], $perso2->defense['basicDefense'], $perso2->esquiveBonus, $perso2->class, $perso2->weapon->id, $perso2->weapon->strength, $action2);
+$currCharacDB->insertCharac(2, $perso2->id,  $perso2->health['currentPV'], $perso2->strength['basicStrength'], $perso2->defense['basicDefense'], $perso2->esquiveBonus, $perso2->weapon->id, $perso2->weapon->strength, $action2);
 
 if (($perso1->health['currentPV'] <= 0) && ($perso2->health['currentPV'] <= 0)) {
     header('Location:./winner.php?win=0');

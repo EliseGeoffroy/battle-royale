@@ -28,6 +28,7 @@ switch ($_GET['win']) {
 if ($someoneWins) {
 
     $winnerTable = $currCharacDB->selectOne($numWinner);
+
     $winnerName = $winnerTable['name'];
     $winnerId = $winnerTable['idCharac'];
 
@@ -37,7 +38,7 @@ if ($someoneWins) {
 
     $currCharacDB->delete();
 
-    $currCharacDB->insertCharac(1, $winnerId, $winnerName, $winnerTable['currHealth'], $winnerTable['totalHealth'], $winnerTable['currStrength'], $winnerTable['currDefense'],  $winnerTable['esquiveBonus'], $winnerTable['class'], $winnerTable['idWeapon'], $winnerTable['currStrengthWeapon']);
+    $currCharacDB->insertCharac(1, $winnerId,  $winnerTable['currHealth'],  $winnerTable['currStrength'], $winnerTable['currDefense'],  $winnerTable['esquiveBonus'], $winnerTable['idWeapon'], $winnerTable['currStrengthWeapon']);
 
     $characterListDB->updateStatus('dead', $loserId);
 } else {

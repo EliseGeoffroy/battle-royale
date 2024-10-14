@@ -27,8 +27,11 @@ if (isset($_GET['state'])) {
         $choice = $_GET['choice'];
     } else {
         $choice = 'charac1';
+        $characterListDB->updateAllStatus('available');
+        $currCharacDB->delete();
     }
 }
+
 
 if (($choice == 'charac1') || ($choice == 'charac2')) {
     $characList = $characterListDB->selectAll();
@@ -54,6 +57,7 @@ if (($choice == 'charac1') || ($choice == 'charac2')) {
     <main>
 
         <?php if (($choice == 'charac1') || ($choice == 'charac2')):
+
             require_once __DIR__ . '/includes/index-charac.php';
 
         else:

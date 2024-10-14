@@ -7,6 +7,7 @@ class CharacterListDB
     private PDOStatement $statementSelectAll;
     private PDOStatement $statementSelectById;
     private PDOStatement $statementUpdateStatus;
+    private PDOStatement $statementUpdateAllStatus;
 
 
 
@@ -17,6 +18,8 @@ class CharacterListDB
         $this->statementSelectById = $pdo->prepare("SELECT id, name, strength, defense, health, class FROM characterlist WHERE id=:id");
 
         $this->statementUpdateStatus = $pdo->prepare("UPDATE characterList SET status=:status WHERE id=:id");
+
+        $this->statementUpdateAllStatus = $pdo->prepare("UPDATE characterList SET status=:status");
     }
 
 
@@ -38,6 +41,12 @@ class CharacterListDB
         $this->statementUpdateStatus->bindValue(':id', $id);
         $this->statementUpdateStatus->bindValue(':status', $status);
         $this->statementUpdateStatus->execute();
+    }
+
+    function updateAllStatus($status)
+    {
+        $this->statementUpdateAllStatus->bindValue(':status', $status);
+        $this->statementUpdateAllStatus->execute();
     }
 }
 
