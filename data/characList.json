@@ -1,0 +1,56 @@
+{
+  "0": {
+    "id": 0,
+    "name": "Legolas",
+    "picture": "https://tse1.mm.bing.net/th?id=OIP.8J297ydKCna9KqSl7z4MDgHaHv&pid=Api",
+    "health": 50,
+    "strength": 10,
+    "defense": 4,
+    "class": "elf"
+  },
+  "1": {
+    "id": 1,
+    "name": "Gimli",
+    "picture": "https://tse4.mm.bing.net/th?id=OIP.w8-nbeLGOuis-YO_M4tR5gHaF3&pid=Api",
+    "health": 40,
+    "strength": 5,
+    "defense": 4,
+    "class": "dwarf"
+  },
+  "2": {
+    "id": 2,
+    "name": "Aragorn",
+    "picture": "https://tse4.mm.bing.net/th?id=OIP._j_LxlqLHZiRNyJ5hFn7lQHaFj&pid=Api",
+    "health": 25,
+    "strength": 10,
+    "defense": 5,
+    "class": "man"
+  },
+  "3": {
+    "id": 3,
+    "name": "Timide",
+    "picture": "https://tse1.explicit.bing.net/th?id=OIP.XEdcPWJFOD6ws5Utb7vaRAHaFg&pid=Api",
+    "health": 10,
+    "strength": 1,
+    "defense": 6,
+    "class": "dwarf"
+  },
+  "4": {
+    "id": 4,
+    "name": "Dobby",
+    "picture": "https://tse3.mm.bing.net/th?id=OIP.5hzqc7lZECW29EcrJUjr9wHaFp&pid=Api",
+    "health": 20,
+    "strength": 6,
+    "defense": 2,
+    "class": "elf"
+  },
+  "5": {
+    "id": 5,
+    "name": "Arthur",
+    "picture": "https://tse1.mm.bing.net/th?id=OIP.FeZsV_NMe1OpZIgLsLqP2wHaD7&pid=Api",
+    "health": 22,
+    "strength": 8,
+    "defense": 5,
+    "class": "man"
+  }
+}

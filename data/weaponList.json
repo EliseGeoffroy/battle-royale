@@ -1,0 +1,23 @@
+{
+  "0": {
+    "id": 0,
+    "name": "Anduril",
+    "picture": "https://tse4.mm.bing.net/th?id=OIP.FVj1FejuJlGDDieRBczQWgHaE7&pid=Api",
+    "strength": 5,
+    "class": "sword"
+  },
+  "1": {
+    "id": 1,
+    "name": "Ax-o-lot",
+    "picture": "https://tse2.mm.bing.net/th?id=OIP.bKPTdYNC5ltQwRrD7GAoLAHaHa&pid=Api",
+    "strength": 6,
+    "class": "ax"
+  },
+  "2": {
+    "id": 2,
+    "name": "Jeanne-l'Arc",
+    "picture": "https://tse1.explicit.bing.net/th?id=OIP.euKnV9bWyS1Wd5TRJlvvtgHaJn&pid=Api",
+    "strength": 3,
+    "class": "bow"
+  }
+}

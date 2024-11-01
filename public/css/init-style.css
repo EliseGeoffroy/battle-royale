@@ -1,0 +1,44 @@
+@import './general-style.css';  
+
+h1 {
+    color:var(--dark);
+}
+
+
+.gallery {
+    display:flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin:0.5rem;
+    overflow: scroll;
+    height:37rem;
+    justify-content: center;
+}
+
+.character, .weapon{
+    height: 15rem;
+    width: 12rem;
+    display: flex;
+    flex-direction: column;
+    border: var(--border);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    align-items: center;
+    margin:1.5rem;
+    background-color: white;
+}
+
+.name, .class{
+    margin: 0.25rem;
+}
+
+.features {
+    border-top:var(--border);
+    margin-top:0.25rem;
+}
+
+img  {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
