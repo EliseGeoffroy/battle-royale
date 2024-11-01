@@ -2,14 +2,20 @@
 
 $dir = __DIR__;
 
-require_once $dir . '/database/pdoOpen.php';
+
+$currCharacDB = require_once($dir . '/database/models/currCharacDB.php');
+$weaponDB = require_once($dir . '/database/models/weaponDB.php');
+
 
 require_once $dir . '/includes/classPerso.php';
 require_once $dir . '/includes/classWeapon.php';
+
+
 require_once $dir . '/includes/usualFunctions.php';
 
 require_once $dir . '/includes/objectConstruct.php';
-
+$perso1 = classChoice($currCharacDB, 1, $weaponDB);
+$perso2 = classChoice($currCharacDB, 2, $weaponDB);
 
 
 
@@ -57,42 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-echo 'je suis là!';
-$statement = $pdo->prepare("INSERT INTO currcharac (idRound, numPerso, idCharac, name, currHealth, totalHealth, currStrength, currDefense, esquiveBonus, class, idWeapon, currStrengthWeapon, action) VALUES (DEFAULT,:numPerso,:id,:name,:currHealth,:totalHealth,:currStrength,:currDefense, :esquiveBonus, :class, :idWeapon, :currStrengthWeapon, :action)");
 
-$statement->bindValue(':numPerso', 1);
-$statement->bindValue(':id', $perso1->id);
-$statement->bindValue(':name', $perso1->name);
-$statement->bindValue(':currHealth', $perso1->health['currentPV']);
-$statement->bindValue(':totalHealth', $perso1->health['totalPV']);
-$statement->bindValue(':currStrength', $perso1->strength['basicStrength']);
-$statement->bindValue(':currDefense', $perso1->defense['basicDefense']);
-$statement->bindValue(':esquiveBonus', $perso1->esquiveBonus);
-echo 'esquive :' . $perso1->esquiveBonus;
-$statement->bindValue(':class', $perso1->class);
-$statement->bindValue(':idWeapon', $perso1->weapon->id);
-$statement->bindValue(':currStrengthWeapon', $perso1->weapon->strength);
-$statement->bindValue(':action', $action1);
+$currCharacDB->insertCharac(1, $perso1->id,  $perso1->health['currentPV'],  $perso1->strength['basicStrength'], $perso1->defense['basicDefense'], $perso1->esquiveBonus, $perso1->weapon->id, $perso1->weapon->strength, $action1);
 
-$statement->execute();
-
-
-$statement->bindValue(':numPerso', 2);
-$statement->bindValue(':id', $perso2->id);
-$statement->bindValue(':name', $perso2->name);
-$statement->bindValue(':currHealth', $perso2->health['currentPV']);
-$statement->bindValue(':totalHealth', $perso2->health['totalPV']);
-$statement->bindValue(':currStrength', $perso2->strength['basicStrength']);
-$statement->bindValue(':currDefense', $perso2->defense['basicDefense']);
-$statement->bindValue(':esquiveBonus', $perso2->esquiveBonus);
-$statement->bindValue(':class', $perso2->class);
-$statement->bindValue(':idWeapon', $perso2->weapon->id);
-$statement->bindValue(':currStrengthWeapon', $perso2->weapon->strength);
-$statement->bindValue(':action', $action2);
-
-$statement->execute();
-
-
+$currCharacDB->insertCharac(2, $perso2->id,  $perso2->health['currentPV'], $perso2->strength['basicStrength'], $perso2->defense['basicDefense'], $perso2->esquiveBonus, $perso2->weapon->id, $perso2->weapon->strength, $action2);
 
 if (($perso1->health['currentPV'] <= 0) && ($perso2->health['currentPV'] <= 0)) {
     header('Location:./winner.php?win=0');

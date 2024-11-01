@@ -9,8 +9,7 @@
                 <p class=class> <?= match ($charac['class']) {
                                     "elf" => "Elfe",
                                     "man" => "Homme",
-                                    "dwarf" => "Nain",
-                                    default => "Inconnue"
+                                    "dwarf" => "Nain"
                                 } ?></p>
 
                 <div class=features>

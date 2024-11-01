@@ -2,20 +2,24 @@
 
 $dir = __DIR__;
 
-require_once $dir . '/database/pdoOpen.php';
+
+$currCharacDB = require_once($dir . '/database/models/currCharacDB.php');
+$weaponDB = require_once($dir . '/database/models/weaponDB.php');
 
 require_once $dir . '/includes/classPerso.php';
 require_once $dir . '/includes/classWeapon.php';
 
-require_once $dir . '/includes/objectConstruct.php';
-
 require_once $dir . '/includes/usualFunctions.php';
+
+require_once $dir . '/includes/objectConstruct.php';
+$perso1 = classChoice($currCharacDB, 1, $weaponDB);
+$perso2 = classChoice($currCharacDB, 2, $weaponDB);
 
 
 if ($_GET['status'] == 'gip') {
 
-    $descrAction1 = editDescription($pdo, $perso1, $perso2, 1);
-    $descrAction2 = editDescription($pdo, $perso2, $perso1, 2);
+    $descrAction1 = editDescription($perso1, $perso2, 1, $currCharacDB);
+    $descrAction2 = editDescription($perso2, $perso1, 2, $currCharacDB);
 }
 
 ?>
@@ -43,22 +47,11 @@ if ($_GET['status'] == 'gip') {
             <p> <?= $perso2 ?></p>
         </div>
         <form action="./actions.php" method="POST">
-            <div class="action1">
-                <label for="action"><?= 'Choisissez une action pour ' . $perso1->name ?></label>
-                <select name="action1" id="action">
-                    <option value="attack">Attaquer</option>
-                    <option value="defende">Se défendre</option>
-                    <option value="special"><?= $perso1->specialAction ?></option>
-                </select>
-            </div>
-            <div class="action2">
-                <label for="action"><?= 'Choisissez une action pour ' . $perso2->name ?></label>
-                <select name="action2" id="action">
-                    <option value="attack">Attaquer</option>
-                    <option value="defende">Se défendre</option>
-                    <option value="special"><?= $perso2->specialAction ?></option>
-                </select>
-            </div>
+
+
+            <?= actionChoice('action1', $perso1) ?>
+            <?= actionChoice('action2', $perso2) ?>
+
             <button type="Submit">Jouer le tour</button>
         </form>
 

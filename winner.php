@@ -1,7 +1,9 @@
 <?php
 
 $dir = __DIR__;
-require_once $dir . '/database/pdoOpen.php';
+
+$characterListDB = require_once $dir . '/database/models/characterListDB.php';
+$currCharacDB = require_once $dir . '/database/models/currCharacDB.php';
 
 $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
@@ -22,42 +24,29 @@ switch ($_GET['win']) {
 }
 
 
-$statement = $pdo->prepare("SELECT * FROM currcharac WHERE numPerso=:numWinner ORDER BY idRound DESC");
-$statement->bindValue(':numWinner', $numWinner);
-$statement->execute();
-$winnerTable = $statement->fetch();
-$winnerName = $winnerTable['name'];
-$winnerId = $winnerTable['idCharac'];
 
-$statement = $pdo->prepare("SELECT idWeapon, idCharac FROM currcharac WHERE numPerso=:numLoser ORDER BY idRound DESC");
-$statement->bindValue(':numLoser', $numLoser);
-$statement->execute();
+if ($someoneWins) {
 
-$loserWeapon = $statement->fetch()['idWeapon'];
-$loserId = $statement->fetch()['idCharac'];
+    $winnerTable = $currCharacDB->selectOne($numWinner);
 
-$statement = $pdo->prepare("DELETE FROM currcharac");
-$statement->execute();
+    $winnerName = $winnerTable['name'];
+    $winnerId = $winnerTable['idCharac'];
 
-$statement = $pdo->prepare("INSERT INTO currcharac (idRound, numPerso, idCharac, name, currHealth, totalHealth, currStrength, currDefense, esquiveBonus, class, idWeapon, currStrengthWeapon) VALUES (DEFAULT,:numPerso,:id,:name,:currHealth,:totalHealth,:currStrength,:currDefense, :esquiveBonus, :class, :idWeapon, :currStrengthWeapon)");
+    $loserTable = $currCharacDB->selectOne($numLoser);
+    $loserWeapon = $loserTable['idWeapon'];
+    $loserId = $loserTable['idCharac'];
 
-$statement->bindValue(':numPerso', 1);
-$statement->bindValue(':id', $winnerId);
-$statement->bindValue(':name', $winnerName);
-$statement->bindValue(':currHealth', $winnerTable['currHealth']);
-$statement->bindValue(':totalHealth', $winnerTable['totalHealth']);
-$statement->bindValue(':currStrength', $winnerTable['currStrength']);
-$statement->bindValue(':currDefense', $winnerTable['currDefense']);
-$statement->bindValue(':class', $winnerTable['class']);
-$statement->bindValue(':idWeapon', $winnerTable['idWeapon']);
-$statement->bindValue(':currStrengthWeapon', $winnerTable['currStrengthWeapon']);
-$statement->bindValue(':esquiveBonus', $winnerTable['esquiveBonus']);
-$statement->execute();
+    $currCharacDB->delete();
 
-$statement = $pdo->prepare("UPDATE characterList SET status='dead' WHERE id=:id");
-$statement->bindValue(':id', $loserId);
-$statement->execute();
+    $currCharacDB->insertCharac(1, $winnerId,  $winnerTable['currHealth'],  $winnerTable['currStrength'], $winnerTable['currDefense'],  $winnerTable['esquiveBonus'], $winnerTable['idWeapon'], $winnerTable['currStrengthWeapon']);
 
+    $characterListDB->updateStatus('dead', $loserId);
+} else {
+    $perso1Id = $currCharacDB->selectOneId(1);
+    $perso2Id = $currCharacDB->selectOneId(2);
+    $characterListDB->updateStatus('dead', $perso1Id);
+    $characterListDB->updateStatus('dead', $perso2Id);
+}
 
 ?>
 

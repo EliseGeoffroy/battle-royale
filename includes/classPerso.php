@@ -6,18 +6,18 @@ interface PersoModel
     function defende();
     function beAttacked(int $damage);
     function endOfGame();
-    //  function special();
 }
 
 trait BaseAction
 {
     function attack(int $defense, bool $esquiveBonus)
     {
+        $upToSucceed = 2;
         if ($esquiveBonus == true) {
-            $succeed = random_int(1, 6) > 4 ? true : false;
-        } else {
-            $succeed = random_int(1, 6) > 2 ? true : false;
+            $upToSucceed = 4;
         }
+        $succeed = random_int(1, 6) > $upToSucceed;
+
         if ($succeed) {
             $damage = ($this->strength['currentStrength'] - $defense > 0) ? $this->strength['currentStrength'] - $defense : 0;
         } else {

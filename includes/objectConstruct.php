@@ -1,26 +1,19 @@
 <?php
 
-$perso1 = classChoice($pdo, 1);
-$perso2 = classChoice($pdo, 2);
-
-
-function weaponConstruct($idWeapon, $pdo)
+function weaponConstruct($idWeapon, $weaponDB)
 {
-    $statement = $pdo->prepare("SELECT name, strength, class FROM weapon WHERE id=:id");
-    $statement->bindValue(':id', $idWeapon);
-    $statement->execute();
-    $arrayWeapon = $statement->fetch();
+    $arrayWeapon = $weaponDB->selectOne($idWeapon);
     $weapon = new Weapon($idWeapon, $arrayWeapon['name'], $arrayWeapon['strength'], $arrayWeapon['class']);
+
     return $weapon;
 }
 
-function classChoice($pdo, $numPerso)
+function classChoice($currCharacDB, $numPerso, $weaponDB)
 {
-    $statement = $pdo->prepare("SELECT idCharac, name, totalHealth, currHealth, currStrength, currDefense, esquiveBonus, class, idWeapon FROM currCharac WHERE numPerso=:numPerso ORDER BY idRound DESC");
-    $statement->bindValue(':numPerso', $numPerso);
-    $statement->execute();
-    $arrayPerso = $statement->fetch();
-    $weapon = weaponConstruct($arrayPerso['idWeapon'], $pdo);
+    $arrayPerso = $currCharacDB->selectOne($numPerso);
+
+
+    $weapon = weaponConstruct($arrayPerso['idWeapon'], $weaponDB);
 
     switch ($arrayPerso['class']) {
         case 'elf':
